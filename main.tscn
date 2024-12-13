@@ -1,0 +1,92 @@
+[gd_scene load_steps=7 format=3 uid="uid://c8gve5hubpcnj"]
+
+[ext_resource type="Script" path="res://character_body_3d.gd" id="1_kw0l1"]
+[ext_resource type="Script" path="res://labels.gd" id="2_5gsfy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vs8md"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_afmgh"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_uhuqq"]
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ot6wr"]
+size = Vector3(100, 1, 100)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_kw0l1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_vs8md")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_afmgh")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.30377, 18.4635)
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_uhuqq")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("BoxShape3D_ot6wr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+
+[node name="Labels" type="VBoxContainer" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("2_5gsfy")
+
+[node name="Current" type="Label" parent="UI/MarginContainer/HBoxContainer/Labels"]
+layout_mode = 2
+
+[node name="Saved" type="Label" parent="UI/MarginContainer/HBoxContainer/Labels"]
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Save" type="Button" parent="UI/MarginContainer/HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Save"
+
+[node name="Load" type="Button" parent="UI/MarginContainer/HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Load"
+
+[connection signal="pressed" from="UI/MarginContainer/HBoxContainer/Buttons/Save" to="CharacterBody3D" method="_on_save_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/HBoxContainer/Buttons/Load" to="CharacterBody3D" method="_on_load_pressed"]
